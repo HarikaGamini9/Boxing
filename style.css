@@ -7,7 +7,7 @@ body {
     background-color: #f0f0f0;
     margin: 0;
     text-align: center;
-    user-select: none; /* Prevent text selection when clicking fast */
+    user-select: none;
 }
 
 .container {
@@ -29,25 +29,44 @@ h1 {
 
 .punching-bag-area {
     position: relative;
-    width: 150px; /* Adjust as needed */
-    height: 350px; /* Adjust as needed */
+    width: 150px;
+    height: 350px;
     margin: 30px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.boxing-rig {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    perspective: 800px;
+    transform-style: preserve-3d;
+    transform-origin: bottom center;
+}
+.bag:hover {
+    transform: rotateY(-8deg);
+}
+
+
 .bag {
     width: 120px;
     height: 200px;
-    background-color: #d9534f; /* Reddish color */
-    border: 3px solid #a94442;
-    border-radius: 15px 15px 30px 30px; /* Rounded top, more rounded bottom */
+    background: linear-gradient(to right, #b22222 10%, #d9534f 50%, #a94442 90%);
+    border: 3px solid #891818;
+    border-radius: 15px 15px 30px 30px;
     cursor: pointer;
-    position: relative; /* For z-index if needed and transform-origin */
+    position: relative;
     z-index: 2;
-    transform-origin: 50% 0%; /* Swing from the top center */
-    box-shadow: inset 0 -10px 15px rgba(0,0,0,0.1);
+
+    box-shadow:
+        inset -10px 0 20px rgba(0, 0, 0, 0.3),  /* inner left shadow */
+        inset 10px 0 20px rgba(255, 255, 255, 0.1), /* inner right highlight */
+        0 10px 20px rgba(0,0,0,0.2); /* bottom shadow */
+
+    transform-style: preserve-3d;
+    transition: transform 0.2s;
 }
 
 .stand-pole {
@@ -55,7 +74,7 @@ h1 {
     height: 50px;
     background-color: #555;
     border: 2px solid #333;
-    margin-top: -5px; /* Slight overlap */
+    margin-top: -5px;
     position: relative;
     z-index: 1;
 }
@@ -70,42 +89,6 @@ h1 {
     position: relative;
     z-index: 0;
 }
-
-/* Hit animation */
-.bag.hit-mild {
-    animation: hit-mild-anim 0.3s ease-out;
-}
-.bag.hit-medium {
-    animation: hit-medium-anim 0.4s ease-out;
-}
-.bag.hit-strong {
-    animation: hit-strong-anim 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Adds some bounce */
-}
-
-@keyframes hit-mild-anim {
-    0% { transform: rotate(0deg) translateX(0); }
-    25% { transform: rotate(-3deg) translateX(-2px); }
-    50% { transform: rotate(3deg) translateX(2px); }
-    75% { transform: rotate(-2deg) translateX(-1px); }
-    100% { transform: rotate(0deg) translateX(0); }
-}
-
-@keyframes hit-medium-anim {
-    0% { transform: rotate(0deg) translateX(0); }
-    25% { transform: rotate(-8deg) translateX(-5px); }
-    50% { transform: rotate(8deg) translateX(5px); }
-    75% { transform: rotate(-4deg) translateX(-2px); }
-    100% { transform: rotate(0deg) translateX(0); }
-}
-
-@keyframes hit-strong-anim {
-    0% { transform: rotate(0deg) translateX(0); }
-    30% { transform: rotate(-15deg) translateX(-10px); }
-    60% { transform: rotate(12deg) translateX(8px); }
-    80% { transform: rotate(-7deg) translateX(-4px); }
-    100% { transform: rotate(0deg) translateX(0); }
-}
-
 
 .score-board {
     margin-top: 20px;
@@ -131,4 +114,69 @@ h1 {
 
 #resetButton:hover {
     background-color: #4cae4c;
+}
+
+/* Mild rock */
+@keyframes rock-forward {
+    0% { transform: rotateX(0deg); }
+    30% { transform: rotateX(6deg); }
+    60% { transform: rotateX(-4deg); }
+    100% { transform: rotateX(0deg); }
+}
+
+/* Medium rock */
+@keyframes rock-medium {
+    0% { transform: rotateX(0deg); }
+    30% { transform: rotateX(12deg); }
+    60% { transform: rotateX(-8deg); }
+    100% { transform: rotateX(0deg); }
+}
+
+/* Fall forward (strong hit) */
+@keyframes fall-forward {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(80deg); }
+}
+
+/* Rise back up */
+@keyframes rise-up {
+    0% { transform: rotateX(80deg); }
+    100% { transform: rotateX(0deg); }
+}
+
+/* Shake effect */
+@keyframes ring-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+/* Animation classes */
+.boxing-rig.rig-hit-mild {
+    animation: rock-forward 0.5s ease-out;
+    transform-origin: bottom center;
+    transform-style: preserve-3d;
+}
+
+.boxing-rig.rig-hit-medium {
+    animation: rock-medium 0.7s ease-out;
+    transform-origin: bottom center;
+    transform-style: preserve-3d;
+}
+
+.boxing-rig.rig-hit-fall {
+    animation: fall-forward 2s ease-in forwards;
+    transform-origin: bottom center;
+    transform-style: preserve-3d;
+}
+
+.boxing-rig.ring-shake {
+    animation: ring-shake 0.4s ease-in-out;
+}
+
+.boxing-rig.rig-rise-up {
+    animation: rise-up 1s ease-out forwards;
+    transform-origin: bottom center;
+    transform-style: preserve-3d;
 }

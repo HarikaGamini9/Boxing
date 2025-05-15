@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     const punchingBag = document.getElementById('punchingBag');
+    const boxingRig = document.querySelector('.boxing-rig');
     const scoreValueDisplay = document.getElementById('scoreValue');
     const lastHitValueDisplay = document.getElementById('lastHitValue');
     const resetButton = document.getElementById('resetButton');
 
-    // Sound elements (make sure you have these sound files or remove these lines)
     const hitSoundSoft = document.getElementById('hitSoundSoft');
     const hitSoundMedium = document.getElementById('hitSoundMedium');
     const hitSoundHard = document.getElementById('hitSoundHard');
 
     let score = 0;
     let mouseDownTime;
-    let isAnimating = false; // To prevent re-triggering animation while one is playing
+    let isAnimating = false;
 
     function updateScore(points) {
         score += points;
@@ -20,21 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function playHitSound(strength) {
-        // Rewind sound to play again if clicked rapidly
-        if (strength === 'strong' && hitSoundHard) {
+        if (strength === 'strong') {
             hitSoundHard.currentTime = 0;
             hitSoundHard.play().catch(e => console.log("Audio play failed:", e));
-        } else if (strength === 'medium' && hitSoundMedium) {
+        } else if (strength === 'medium') {
             hitSoundMedium.currentTime = 0;
             hitSoundMedium.play().catch(e => console.log("Audio play failed:", e));
-        } else if (hitSoundSoft) { // Default to soft
+        } else {
             hitSoundSoft.currentTime = 0;
             hitSoundSoft.play().catch(e => console.log("Audio play failed:", e));
         }
     }
 
     punchingBag.addEventListener('mousedown', (event) => {
-        // Only register left clicks for "punching"
         if (event.button !== 0) return;
         mouseDownTime = Date.now();
     });
@@ -43,50 +41,78 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.button !== 0 || !mouseDownTime || isAnimating) return;
 
         const mouseUpTime = Date.now();
-        const clickDuration = mouseUpTime - mouseDownTime; // Milliseconds
-        mouseDownTime = null; // Reset for next click
+        const clickDuration = mouseUpTime - mouseDownTime;
+        mouseDownTime = null;
 
         let points = 0;
         let animationClass = '';
         let soundStrength = 'soft';
 
-        // Determine points and animation based on click duration
-        // Shorter duration = faster/stronger hit
-        if (clickDuration < 75) { // Very fast
-            points = Math.floor(Math.random() * 6) + 15; // 15-20 points
-            animationClass = 'hit-strong';
+        // STRONG hit (fall)
+        if (clickDuration < 75) {
+            points = Math.floor(Math.random() * 6) + 15;
             soundStrength = 'strong';
-        } else if (clickDuration < 150) { // Fast
-            points = Math.floor(Math.random() * 5) + 8;  // 8-12 points
-            animationClass = 'hit-medium';
+
+            isAnimating = true;
+            updateScore(points);
+            playHitSound(soundStrength);
+
+            boxingRig.classList.add('rig-hit-fall');
+            boxingRig.classList.add('ring-shake');
+
+            // Remove shake after it's done
+            setTimeout(() => {
+                boxingRig.classList.remove('ring-shake');
+            }, 400);
+
+            // Rise up after 2 seconds
+            setTimeout(() => {
+                boxingRig.classList.remove('rig-hit-fall');
+                boxingRig.classList.add('rig-rise-up');
+
+                boxingRig.addEventListener('animationend', function handler() {
+                    boxingRig.classList.remove('rig-rise-up');
+                    isAnimating = false;
+                    boxingRig.removeEventListener('animationend', handler);
+                });
+            }, 3000);
+
+            return;
+        }
+
+        // MEDIUM hit
+        if (clickDuration < 150) {
+            points = Math.floor(Math.random() * 5) + 8;
+            animationClass = 'rig-hit-medium';
             soundStrength = 'medium';
-        } else if (clickDuration < 300) { // Medium
-            points = Math.floor(Math.random() * 3) + 3;  // 3-5 points
-            animationClass = 'hit-mild';
-        } else { // Slow
+        }
+        // MILD hit
+        else if (clickDuration < 300) {
+            points = Math.floor(Math.random() * 3) + 3;
+            animationClass = 'rig-hit-mild';
+        }
+        // SLOW hit
+        else {
             points = 1;
-            animationClass = 'hit-mild'; // Can be same as medium or a very subtle one
+            animationClass = 'rig-hit-mild';
         }
 
         updateScore(points);
         playHitSound(soundStrength);
 
-        // Apply animation
+        // Apply animation for mild/medium
         if (animationClass) {
             isAnimating = true;
-            punchingBag.classList.add(animationClass);
+            boxingRig.classList.add(animationClass);
 
-            // Remove animation class after it finishes
-            // Use 'animationend' event for more robust timing
-            punchingBag.addEventListener('animationend', function handler() {
-                punchingBag.classList.remove(animationClass);
+            boxingRig.addEventListener('animationend', function handler() {
+                boxingRig.classList.remove(animationClass);
                 isAnimating = false;
-                punchingBag.removeEventListener('animationend', handler); // Clean up listener
+                boxingRig.removeEventListener('animationend', handler);
             });
         }
     });
 
-    // Prevent dragging the bag image
     punchingBag.addEventListener('dragstart', (event) => {
         event.preventDefault();
     });
@@ -95,6 +121,5 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         scoreValueDisplay.textContent = score;
         lastHitValueDisplay.textContent = 0;
-        console.log("Score reset");
     });
 });
