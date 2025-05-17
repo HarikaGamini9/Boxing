@@ -2,34 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kick the Boxing Bag!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Freestanding Punching Bag Game (V2.3 - Centered)</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Kick this Boxing Bag</h1>
-        <p class="instructions">(Click fast for more points!)</p>
-
-        <div class="punching-bag-area">
-            <div class="boxing-rig">
-                <div id="punchingBag" class="bag"></div>
-                <div class="stand-pole"></div>
-                <div class="stand-base"></div>
-            </div>
+    <div class="game-container">
+        <header class="game-header">
+            <h1>Punching Bag Stand!</h1>
+            <p>Press SPACE or TAP the bag to punch!</p>
+        </header>
+        <div id="canvasContainer">
+             <canvas id="boxingCanvas3D"></canvas>
         </div>
-
-        <div class="score-board">
-            <h2>Score: <span id="scoreValue">0</span></h2>
-            <p>Last Hit: <span id="lastHitValue">0</span> points</p>
-        </div>
-        <button id="resetButton">Reset Score</button>
+        <div id="emojiOverlay"></div>
+        <footer class="game-footer">
+            <div id="scoreDisplay">Score: 0</div>
+            <div id="speedDisplay">last hit: Normal</div>
+             <button id="resetButton">Reset</button>
+        </footer>
     </div>
 
-    <audio id="hitSoundSoft" src="hit-soft.mp3" preload="auto"></audio>
-    <audio id="hitSoundMedium" src="hit-medium.mp3" preload="auto"></audio>
-    <audio id="hitSoundHard" src="hit-hard.mp3" preload="auto"></audio>
+    <!-- Audio Elements -->
+    <audio id="punchSound1" src="punch-light.mp3" preload="auto"></audio>
+    <audio id="punchSound2" src="hit-medium.mp3" preload="auto"></audio>
+    <audio id="punchSound3" src="hit-hard.mp3" preload="auto"></audio>
 
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Game Logic -->
     <script src="script.js"></script>
 </body>
 </html>

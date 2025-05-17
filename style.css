@@ -1,182 +1,187 @@
+/* style.css - Reviewed for mobile compatibility */
+html,
 body {
-    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
-    margin: 0;
+    /* Prevent mobile browsers from adjusting font size */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    /* Use percentage width for responsiveness, adjust as needed */
+    width: 95%;
+    /* Increased width for better mobile use */
+    max-width: 960px;
+    /* Max width for larger screens */
+    height: 95%;
+    /* Use percentage height for responsiveness */
+    max-height: 700px;
+    /* Optional: set a max height */
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    background-color: #ffffffdd;
     text-align: center;
-    user-select: none;
-}
-
-.container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-}
-
-h1 {
-    color: #333;
-}
-
-.instructions {
-    color: #555;
-    font-size: 0.9em;
-    margin-bottom: 20px;
-}
-
-.punching-bag-area {
+    overflow: hidden;
+    /* Center the container using margins */
+    margin: auto;
     position: relative;
-    width: 150px;
-    height: 350px;
-    margin: 30px auto;
+    /* Needed for emoji overlay positioning */
+}
+
+.game-header {
+    padding: 15px;
+    background-color: #ff6f61;
+    flex-shrink: 0;
+    z-index: 10;
+    color: white;
+    position: relative;
+}
+
+.game-header h1 {
+    margin: 0;
+    font-size: clamp(1.2em, 4vw, 1.8em);
+    color: #ffc107;
+}
+
+.game-header p {
+    margin: 5px 0 0;
+    font-size: clamp(0.8em, 2.5vw, 0.9em);
+}
+
+#canvasContainer {
+    flex-grow: 1;
     display: flex;
-    flex-direction: column;
+    /* Use flexbox to center canvas inside */
+    justify-content: center;
     align-items: center;
-}
-
-.boxing-rig {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    perspective: 800px;
-    transform-style: preserve-3d;
-    transform-origin: bottom center;
-}
-.bag:hover {
-    transform: rotateY(-8deg);
-}
-
-
-.bag {
-    width: 120px;
-    height: 200px;
-    background: linear-gradient(to right, #b22222 10%, #d9534f 50%, #a94442 90%);
-    border: 3px solid #891818;
-    border-radius: 15px 15px 30px 30px;
-    cursor: pointer;
     position: relative;
-    z-index: 2;
-
-    box-shadow:
-        inset -10px 0 20px rgba(0, 0, 0, 0.3),  /* inner left shadow */
-        inset 10px 0 20px rgba(255, 255, 255, 0.1), /* inner right highlight */
-        0 10px 20px rgba(0,0,0,0.2); /* bottom shadow */
-
-    transform-style: preserve-3d;
-    transition: transform 0.2s;
+    background-color: #20232a;
+    overflow: hidden;
 }
 
-.stand-pole {
-    width: 20px;
-    height: 50px;
-    background-color: #555;
-    border: 2px solid #333;
-    margin-top: -5px;
+#boxingCanvas3D {
+    display: block;
+    /* Removes extra space below canvas */
+    max-width: 100%;
+    max-height: 100%;
+    outline: none;
+    /* Ensure canvas is responsive */
+    width: 100%;
+    height: 100%;
+}
+
+.game-footer {
+    padding: 10px 5px;
+    background-color: #4caf50;
+    flex-shrink: 0;
+    z-index: 10;
     position: relative;
-    z-index: 1;
 }
 
-.stand-base {
-    width: 150px;
-    height: 50px;
-    background-color: #777;
-    border: 3px solid #444;
-    border-radius: 10px 10px 5px 5px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-    position: relative;
-    z-index: 0;
-}
-
-.score-board {
-    margin-top: 20px;
-    font-size: 1.2em;
-}
-
-#scoreValue, #lastHitValue {
-    font-weight: bold;
-    color: #d9534f;
+#scoreDisplay,
+#speedDisplay {
+    font-size: clamp(1em, 3vw, 1.1em);
+    margin: 3px auto;
+    color: #fff;
 }
 
 #resetButton {
-    margin-top: 20px;
-    padding: 10px 20px;
+    padding: 8px 16px;
     font-size: 1em;
-    color: white;
-    background-color: #5cb85c;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    background-color: #ff9800;
+    color: white;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background 0.3s ease;
 }
 
 #resetButton:hover {
-    background-color: #4cae4c;
+    background-color: #e68900;
 }
 
-/* Mild rock */
-@keyframes rock-forward {
-    0% { transform: rotateX(0deg); }
-    30% { transform: rotateX(6deg); }
-    60% { transform: rotateX(-4deg); }
-    100% { transform: rotateX(0deg); }
+#emojiOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Allows clicks/taps to pass through to the canvas */
+    overflow: hidden;
+    z-index: 20;
 }
 
-/* Medium rock */
-@keyframes rock-medium {
-    0% { transform: rotateX(0deg); }
-    30% { transform: rotateX(12deg); }
-    60% { transform: rotateX(-8deg); }
-    100% { transform: rotateX(0deg); }
+.emoji {
+    position: absolute;
+    font-size: 2.5rem;
+    animation: fall 2s ease-in forwards;
+    /* Added translate(-50%, -50%) back for centering the emoji div itself around the calculated point */
+    transform: translate(-50%, -50%);
 }
 
-/* Fall forward (strong hit) */
-@keyframes fall-forward {
-    0% { transform: rotateX(0deg); }
-    100% { transform: rotateX(80deg); }
+@keyframes fall {
+    0% {
+        /* Start near the calculated spawn point */
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        /* Fall off the bottom of the viewport */
+        transform: translate(-50%, calc(100vh - 0px)) scale(1);
+        opacity: 0;
+    }
 }
 
-/* Rise back up */
-@keyframes rise-up {
-    0% { transform: rotateX(80deg); }
-    100% { transform: rotateX(0deg); }
+/* Responsive adjustments - Tweak as needed */
+@media (orientation: landscape) and (max-height: 480px) {
+    /* Shallow landscape */
+    .game-header {
+        padding: 5px;
+    }
+    .game-header h1 {
+        font-size: clamp(1em, 3.5vh, 1.2em);
+    }
+    .game-header p {
+        font-size: clamp(0.7em, 2vh, 0.8em);
+    }
+    .game-footer {
+        padding: 5px;
+    }
+    #scoreDisplay,
+    #speedDisplay {
+        font-size: clamp(0.8em, 2.5vh, 1em);
+    }
 }
 
-/* Shake effect */
-@keyframes ring-shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-}
-
-/* Animation classes */
-.boxing-rig.rig-hit-mild {
-    animation: rock-forward 0.5s ease-out;
-    transform-origin: bottom center;
-    transform-style: preserve-3d;
-}
-
-.boxing-rig.rig-hit-medium {
-    animation: rock-medium 0.7s ease-out;
-    transform-origin: bottom center;
-    transform-style: preserve-3d;
-}
-
-.boxing-rig.rig-hit-fall {
-    animation: fall-forward 2s ease-in forwards;
-    transform-origin: bottom center;
-    transform-style: preserve-3d;
-}
-
-.boxing-rig.ring-shake {
-    animation: ring-shake 0.4s ease-in-out;
-}
-
-.boxing-rig.rig-rise-up {
-    animation: rise-up 1s ease-out forwards;
-    transform-origin: bottom center;
-    transform-style: preserve-3d;
+@media (max-width: 600px) {
+    /* Adjust for smaller screens, e.g., phones */
+    .game-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    /* Ensure canvas takes full available space within container */
+    #canvasContainer {
+         flex-grow: 1;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+    }
+    #boxingCanvas3D {
+        width: 100%;
+        height: 100%;
+    }
 }
